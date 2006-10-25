@@ -1,0 +1,28 @@
+[Changes for 0.10 - 2006-10-25]
+
+* Renamed from MessageBus.pm to IPC::PubSub.
+* IPC::PubSub's factory methods are now ->new_subscriber and ->new_publisher.
+* New ->channels API for Publisher and Subscriber objects.
+* New ->publish, ->unpublish and ->expiry APIs for Publisher objects.
+* New ->subscribe, ->unsubscribe APIs for Subscriber objects.
+
+[Changes for 0.04 - 2006-10-24]
+
+* Expose ->lock, ->unlock, ->fetch, ->store APIs into the IPC::PubSub object.
+* Implement ->lock and ->unlock methods for non-Memcached backends.
+* The tests are no longer entirely skipped when memcached is not running.
+
+[Changes for 0.03 - 2006-10-24]
+
+* New backend: JiftyDBI.
+* Multiple publishers now work in DBM_Deep and Memcached backends.
+* Memcached now atomically handles publisher announcement and removal.
+
+[Changes for 0.02 - 2006-10-24]
+
+* Thanks to mstrout++ this thing actually works now. :-)
+* Switched from Class::InsideOut to Class::Accessor::Fast.
+
+[Changes for 0.01 - 2006-10-24]
+
+* Initial release to CPAN of this three-hours-old hack.
