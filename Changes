@@ -1,3 +1,8 @@
+[Changes for 0.11 - 2006-10-25]
+
+* The Memcached backend now takes a namespace parameter to avoid collision.
+* The ->lock, ->unlock, ->fetch, ->store APIs in IPC::PubSub now works again.
+
 [Changes for 0.10 - 2006-10-25]
 
 * Renamed from MessageBus.pm to IPC::PubSub.

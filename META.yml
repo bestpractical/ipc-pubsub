@@ -13,4 +13,4 @@ requires:
   DBM::Deep: 0
   Data::UUID: 0
   perl: 5.005
-version: 0.10
+version: 0.11

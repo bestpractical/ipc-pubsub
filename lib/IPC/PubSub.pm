@@ -1,5 +1,5 @@
 package IPC::PubSub;
-$IPC::PubSub::VERSION = '0.10';
+$IPC::PubSub::VERSION = '0.11';
 
 use 5.005;
 use strict;
@@ -32,10 +32,10 @@ sub new_subscriber {
     IPC::PubSub::Subscriber->new($self->_cache, @_ ? @_ : '');
 }
 
-sub fetch   { (+shift)->fetch(@_)   }
-sub store   { (+shift)->store(@_)   }
-sub lock    { (+shift)->lock(@_)    }
-sub unlock  { (+shift)->unlock(@_)  }
+sub fetch   { (+shift)->_cache->fetch(@_)   }
+sub store   { (+shift)->_cache->store(@_)   }
+sub lock    { (+shift)->_cache->lock(@_)    }
+sub unlock  { (+shift)->_cache->unlock(@_)  }
 
 1;
 
