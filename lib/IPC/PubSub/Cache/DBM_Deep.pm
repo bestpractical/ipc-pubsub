@@ -28,33 +28,33 @@ sub store {
 
 sub publisher_indices {
     my ($self, $chan) = @_;
-    return { %{ $$self->get("$chan#") || {} } };
+    return { %{ $$self->get("pubs:$chan") || {} } };
 }
 
 sub add_publisher {
     my ($self, $chan, $pub) = @_;
-    my $pubs = { %{ $$self->get("$chan#") || {} } };
+    my $pubs = { %{ $$self->get("pubs:$chan") || {} } };
     $pubs->{$pub} = 0;
-    $$self->put("$chan#", $pubs);
+    $$self->put("pubs:$chan", $pubs);
 }
 
 sub remove_publisher {
     my ($self, $chan, $pub) = @_;
-    my $pubs = { %{ $$self->get("$chan#") || {} } };
+    my $pubs = { %{ $$self->get("pubs:$chan") || {} } };
     delete $pubs->{$pub};
-    $$self->put("$chan#", $pubs);
+    $$self->put("pubs:$chan", $pubs);
 }
 
 sub get_index {
     my ($self, $chan, $pub) = @_;
-    ($$self->get("$chan#") || {})->{$pub};
+    ($$self->get("pubs:$chan") || {})->{$pub};
 }
 
 sub set_index {
     my ($self, $chan, $pub, $idx) = @_;
-    my $pubs = { %{ $$self->get("$chan#") || {} } };
+    my $pubs = { %{ $$self->get("pubs:$chan") || {} } };
     $pubs->{$pub} = $idx;
-    $$self->put("$chan#", $pubs);
+    $$self->put("pubs:$chan", $pubs);
 }
 
 1;

@@ -3,6 +3,7 @@ package IPC::PubSub::Cache;
 use strict;
 use File::Spec;
 use Time::HiRes ();
+
 #method fetch                (Str *@keys --> List of Pair)                   { ... }
 #method store                (Str $key, Str $val, Num $time, Num $expiry)    { ... }
 
@@ -14,22 +15,37 @@ use Time::HiRes ();
 
 #method publisher_indices    (Str $chan --> Hash of Int)                     { ... }
 
+sub fetch_data {
+    my $self = shift;
+    my $key  = shift;
+    return (($self->fetch("data:$key"))[0] || [])->[-1];
+}
+
+sub store_data {
+    my $self = shift;
+    my $key  = shift;
+    my $val  = shift;
+    $self->store("data:$key" => $val, -1, 0);
+}
+
 sub modify {
     my $self = shift;
     my $key  = shift;
-    return (($self->fetch("data-$key"))[0] || [])->[-1] unless @_;
+    return $self->fetch_data($key) unless @_;
 
-    if (ref($_[0]) eq 'CODE') {
-        $self->lock("lock-$key");
-        local $_ = (($self->fetch("data-$key"))[0] || [])->[-1];
-        my $rv = $_[0]->();
-        $self->store("data-$key" => $_);
-        $self->unlock("lock-$key");
+    my $with = shift;
+
+    if (ref($with) eq 'CODE') {
+        $self->lock("data:$key");
+        local $_ = $self->fetch_data($key);
+        my $rv = $with->();
+        $self->store_data($key => $_);
+        $self->unlock("data:$key");
         return $rv;
     }
     else {
-        $self->store("data-$key" => $_[0]);
-        return $_[0]
+        $self->store_data($key => $with);
+        return $with;
     }
 }
 
@@ -42,7 +58,7 @@ sub get {
             my $pub = $_;
             my $index = $curr->{$pub};
             map {
-                "$chan-$pub-$_"
+                "chan:$chan-$pub$_"
             } (($orig->{$pub}+1) .. $index);
         } keys(%$curr)
     );
@@ -50,12 +66,12 @@ sub get {
 
 sub put {
     my ($self, $chan, $pub, $index, $msg, $expiry) = @_;
-    $self->store("$chan-$pub-$index", $msg, Time::HiRes::time(), $expiry);
+    $self->store("chan:$chan-$pub$index", $msg, Time::HiRes::time(), $expiry);
     $self->set_index($chan, $pub, $index);
 }
 
 
-use constant LOCK => File::Spec->catdir(File::Spec->tmpdir, 'IPC::PubSub-lock-');
+use constant LOCK => File::Spec->catdir(File::Spec->tmpdir, 'IPC-PubSub-lock-');
 
 my %locks;
 sub lock {

@@ -21,9 +21,21 @@ sub default_config {
     };
 }
 
+sub fetch_data {
+    my $self = shift;
+    my $key  = shift;
+    return $$self->get("data:$key");
+}
+
+sub store_data {
+    my $self = shift;
+    my $key  = shift;
+    my $val  = shift;
+    return $$self->set("data:$key" => $val);
+}
+
 sub fetch {
     my $self = shift;
-    die "Rejecting insanity" if @_ > 100;
     values(%{$$self->get_multi(@_)});
 }
 
@@ -34,50 +46,52 @@ sub store {
 
 sub publisher_indices {
     my ($self, $chan) = @_;
-    $$self->get("$chan#") || {};
+    $$self->get("pubs:$chan") || {};
 }
 
 sub lock {
-    my ($self, $chan) = @_;
+    my ($self, $key) = @_;
     for my $i (1..100) {
-        return if $$self->add("$chan#lock" => 1);
+        return if $$self->add("lock:$key" => 1);
         Time::HiRes::usleep(rand(250000)+250000);
     }
 }
 
 sub unlock {
     my ($self, $chan) = @_;
-    $$self->delete("$chan#lock");
+    $$self->delete("lock:$chan");
 }
 
 sub add_publisher {
     my ($self, $chan, $pub) = @_;
-    $self->lock($chan);
-    my $pubs = $$self->get("$chan#") || {};
+    my $key = "pubs:$chan";
+    $self->lock($key);
+    my $pubs = $$self->get($key) || {};
     $pubs->{$pub} = 0;
-    $$self->set("$chan#", $pubs);
-    $self->unlock($chan);
+    $$self->set($key => $pubs);
+    $self->unlock($key);
 }
 
 sub remove_publisher {
     my ($self, $chan, $pub) = @_;
-    $self->lock($chan);
-    my $pubs = $$self->get("$chan#") || {};
+    my $key = "pubs:$chan";
+    $self->lock($key);
+    my $pubs = $$self->get($key) || {};
     delete $pubs->{$pub};
-    $$self->set("$chan#", $pubs);
-    $self->unlock($chan);
+    $$self->set($key => $pubs);
+    $self->unlock($key);
 }
 
 sub get_index {
     my ($self, $chan, $pub) = @_;
-    ($$self->get("$chan#") || {})->{$pub};
+    ($$self->get("pubs:$chan") || {})->{$pub};
 }
 
 sub set_index {
     my ($self, $chan, $pub, $idx) = @_;
-    my $pubs = $$self->get("$chan#") || {};
+    my $pubs = $$self->get("pubs:$chan") || {};
     $pubs->{$pub} = $idx;
-    $$self->set("$chan#", $pubs);
+    $$self->set("pubs:$chan", $pubs);
 }
 
 1;
