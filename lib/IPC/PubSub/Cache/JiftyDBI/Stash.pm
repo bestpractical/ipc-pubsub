@@ -18,8 +18,21 @@ sub new {
     my %args = (
         db_init => 0,
         db_config => undef,
+        db_handle => undef,
+        table_prefix => 'pubsub_',
         @_
     );
+
+    if ($args{'table_prefix'}) {
+
+         IPC::PubSub::Cache::JiftyDBI::Stash::Item->table_prefix($args{'table_prefix'});
+         IPC::PubSub::Cache::JiftyDBI::Stash::Publisher->table_prefix($args{'table_prefix'});
+    }
+
+    if ($args{'db_handle'}) {
+            $self->handle($args{'db_handle'});
+
+    } else {
     unless ( $args{'db_config'} ) {
         my $filename;
         ( undef, $filename ) = tempfile();
@@ -28,10 +41,12 @@ sub new {
     }
 
     $self->_connect( %{$args{'db_config'}} );
+
+    }
     if ( $args{'db_init'} ) {
         $self->_generate_db();
     }
-    $self;
+    return $self;
 }
 
 sub handle {

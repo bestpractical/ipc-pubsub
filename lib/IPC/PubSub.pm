@@ -1,8 +1,9 @@
 package IPC::PubSub;
-$IPC::PubSub::VERSION = '0.11';
+$IPC::PubSub::VERSION = '0.20';
 
-use 5.005;
+use 5.006;
 use strict;
+use IPC::PubSub::Cacheable;
 use IPC::PubSub::Publisher;
 use IPC::PubSub::Subscriber;
 use base qw/Class::Accessor::Fast/;
@@ -18,7 +19,7 @@ sub new {
     eval { require "IPC/PubSub/Cache/$backend.pm" }
         or die "Cannot load backend module: IPC::PubSub::Cache::$backend: $@";
 
-    $self->_cache("IPC::PubSub::Cache::$backend"->new(@_));
+    $self->_cache(IPC::PubSub::Cacheable->new($backend => \@_));
     return $self;
 }
 
@@ -36,6 +37,7 @@ sub fetch   { (+shift)->_cache->fetch(@_)   }
 sub store   { (+shift)->_cache->store(@_)   }
 sub lock    { (+shift)->_cache->lock(@_)    }
 sub unlock  { (+shift)->_cache->unlock(@_)  }
+sub modify  { (+shift)->_cache->modify(@_)  }
 
 1;
 

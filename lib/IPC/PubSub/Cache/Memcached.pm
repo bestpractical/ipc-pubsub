@@ -1,7 +1,8 @@
 package IPC::PubSub::Cache::Memcached;
 use strict;
-use base 'IPC::PubSub::Cacheable';
+use base 'IPC::PubSub::Cache';
 use Cache::Memcached;
+use Time::HiRes ();
 
 sub new {
     my $class       = shift;
@@ -38,18 +39,14 @@ sub publisher_indices {
 
 sub lock {
     my ($self, $chan) = @_;
-    warn "trying to acquire lock: $chan\n";
-    for my $i (1..10) {
+    for my $i (1..100) {
         return if $$self->add("$chan#lock" => 1);
-        warn "contention: $chan\n";
-        return;
-        sleep 1;
+        Time::HiRes::usleep(rand(250000)+250000);
     }
 }
 
 sub unlock {
     my ($self, $chan) = @_;
-    warn "trying to release lock: $chan\n";
     $$self->delete("$chan#lock");
 }
 

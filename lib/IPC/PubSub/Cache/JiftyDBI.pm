@@ -1,6 +1,6 @@
 package IPC::PubSub::Cache::JiftyDBI;
 use strict;
-use base 'IPC::PubSub::Cacheable';
+use base 'IPC::PubSub::Cache';
 use IPC::PubSub::Cache::JiftyDBI::Stash;
 my %cache;
 
@@ -37,7 +37,15 @@ sub store {
     my ($self, $key, $val, $time, $expiry) = @_;
     $expiry ||= 0;
     my $item = IPC::PubSub::Cache::JiftyDBI::Stash::Item->new(handle => $STASH->handle);
-    $item->create( key => $key, expiry => ($time+$expiry), val => $val);
+
+    $item->load_by_cols( key => $key );
+    if ( $item->id ) {
+        $item->set_val($val);
+        $item->set_expiry($time+$expiry);
+    }
+    else {
+        $item->create( key => $key, expiry => ($time+$expiry), val => $val );
+    }
 }
 
 sub publisher_indices {

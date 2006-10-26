@@ -1,6 +1,6 @@
 package IPC::PubSub::Cache::PlainHash;
 use strict;
-use base 'IPC::PubSub::Cacheable';
+use base 'IPC::PubSub::Cache';
 
 my %cache;
 

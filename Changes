@@ -1,3 +1,9 @@
+[Changes for 0.20 - 2006-10-25]
+
+* Memcached: Remove the debug messages accidentally left in ->lock and ->unlock.
+* New ->modify API for IPC::PubSub and Cache to atomically manipulate cache.
+* Time::HiRes is now required to reduce locking contention.
+
 [Changes for 0.11 - 2006-10-25]
 
 * The Memcached backend now takes a namespace parameter to avoid collision.
