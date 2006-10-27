@@ -1,5 +1,5 @@
 package IPC::PubSub;
-$IPC::PubSub::VERSION = '0.20';
+$IPC::PubSub::VERSION = '0.21';
 
 use 5.006;
 use strict;
@@ -98,11 +98,21 @@ IPC::PubSub - Interprocess Publish/Subscribe channels
     print "Sub is in #moose" if $sub->channels->{'#moose'};
     print "Pub is in #moose" if $pub->channels->{'#moose'};
 
-    # Raw APIs to manipulate the cache
+    # Raw cache manipulation APIs (not advised; use ->modify instead)
     $bus->lock('channel');
     $bus->unlock('channel');
     my @timed_msgs = $bus->fetch('key1', 'key2', 'key3');
     $bus->store('key', 'value', time, 30);
+
+    # Atomic updating of cache content; $_ is stored back on the
+    # end of the callback.
+    my $rv = $bus->modify('key' => sub { delete $_->{foo} });
+
+    # Shorthand for $bus->modify('key' => sub { $_ = 'val' });
+    $bus->modify('key' => 'val');
+
+    # Shorthand for $bus->modify('key' => sub { $_ });
+    $bus->modify('key');
 
 =head1 DESCRIPTION
 
