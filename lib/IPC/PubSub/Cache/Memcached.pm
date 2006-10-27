@@ -31,7 +31,12 @@ sub store_data {
     my $self = shift;
     my $key  = shift;
     my $val  = shift;
-    return $$self->set("data:$key" => $val);
+    if (defined $val) {
+        $$self->set("data:$key" => $val);
+    }
+    else {
+        $$self->delete("data:$key");
+    }
 }
 
 sub fetch {
