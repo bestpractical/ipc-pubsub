@@ -1,3 +1,9 @@
+
+[Changes for 0.22 - ]
+
+* INCOMPATIBLE CHANGE to Jifty::DBI backend: "key" column changed to "data_key"
+  because "key" is a reserved word in some SQL databases.
+
 [Changes for 0.21 - 2006-10-26]
 
 * Speed up ->modify calls for the Memcached backend.

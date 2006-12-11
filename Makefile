@@ -18,9 +18,7 @@
 #     NO_META => q[1]
 #     PL_FILES => {  }
 #     PREREQ_PM => { DBM::Deep=>q[0], Time::HiRes=>q[0], Class::Accessor::Fast=>q[0], Data::UUID=>q[0] }
-#     SIGN => q[1]
-#     VERSION => q[0.21]
-#     dist => { PREOP=>q[$(PERL) -I. -MModule::Install::Admin -e "dist_preop(q($(DISTVNAME)))"] }
+#     VERSION => q[0.22]
 
 # --- MakeMaker post_initialize section:
 
@@ -60,11 +58,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = IPC::PubSub
 NAME_SYM = IPC_PubSub
-VERSION = 0.21
+VERSION = 0.22
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_21
+VERSION_SYM = 0_22
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.21
+XS_VERSION = 0.22
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -275,7 +273,7 @@ ZIPFLAGS = -r
 COMPRESS = gzip --best
 SUFFIX = .gz
 SHAR = shar
-PREOP = $(PERL) -I. -MModule::Install::Admin -e "dist_preop(q($(DISTVNAME)))"
+PREOP = $(NOECHO) $(NOOP)
 POSTOP = $(NOECHO) $(NOOP)
 TO_UNIX = $(NOECHO) $(NOOP)
 CI = ci -u
@@ -283,7 +281,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = IPC-PubSub
-DISTVNAME = IPC-PubSub-0.21
+DISTVNAME = IPC-PubSub-0.22
 
 
 # --- MakeMaker macro section:
@@ -570,7 +568,7 @@ create_distdir :
 	$(PERLRUN) "-MExtUtils::Manifest=manicopy,maniread" \
 		-e "manicopy(maniread(),'$(DISTVNAME)', '$(DIST_CP)');"
 
-distdir : create_distdir  distsignature
+distdir : create_distdir  
 	$(NOECHO) $(NOOP)
 
 
@@ -788,7 +786,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd:
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0,21,0,0">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0,22,0,0">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <TITLE>$(DISTNAME)</TITLE>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Interprocess Publish/Subscribe channels</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Audrey Tang &lt;cpan@audreyt.org&gt;</AUTHOR>' >> $(DISTNAME).ppd
@@ -831,21 +829,3 @@ pm_to_blib : $(TO_INST_PM)
 
 # End.
 # Postamble by Module::Install 0.64
-# --- Module::Install::Admin::Makefile section:
-
-realclean purge ::
-	$(RM_F) $(DISTVNAME).tar$(SUFFIX)
-	$(RM_RF) inc MANIFEST.bak _build
-	$(PERL) -I. -MModule::Install::Admin -e "remove_meta()"
-
-reset :: purge
-
-upload :: test dist
-	cpan-upload -verbose $(DISTVNAME).tar$(SUFFIX)
-
-grok ::
-	perldoc Module::Install
-
-distsign ::
-	cpansign -s
-

@@ -23,13 +23,13 @@ sub fetch {
     my $items = IPC::PubSub::Cache::JiftyDBI::Stash::ItemCollection->new( handle => $STASH->handle );
     foreach my $val (@keys_in_order) {
         $items->limit(
-            column           => 'key',
+            column           => 'data_key',
             entry_aggregator => 'or',
             value            => $val
         );
     }
 
-    my %items = map { $_->key, [$_->expiry, $_->val] } @{ $items->items_array_ref };
+    my %items = map { $_->data_key, [$_->expiry, $_->val] } @{ $items->items_array_ref };
     return @items{@keys_in_order};
 }
 
@@ -38,13 +38,13 @@ sub store {
     $expiry ||= 0;
     my $item = IPC::PubSub::Cache::JiftyDBI::Stash::Item->new(handle => $STASH->handle);
 
-    $item->load_by_cols( key => $key );
+    $item->load_by_cols( data_key => $key );
     if ( $item->id ) {
         $item->set_val($val);
         $item->set_expiry($time+$expiry);
     }
     else {
-        $item->create( key => $key, expiry => ($time+$expiry), val => $val );
+        $item->create( data_key => $key, expiry => ($time+$expiry), val => $val );
     }
 }
 
@@ -95,4 +95,5 @@ sub _get_publisher {
     $publisher->load_by_cols( channel => $chan, name => $pub);
     return $publisher;
 }
+
 1;
