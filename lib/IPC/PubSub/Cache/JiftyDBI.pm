@@ -1,8 +1,8 @@
 package IPC::PubSub::Cache::JiftyDBI;
 use strict;
+use warnings;
 use base 'IPC::PubSub::Cache';
 use IPC::PubSub::Cache::JiftyDBI::Stash;
-my %cache;
 
 use vars qw/$STASH/;
 

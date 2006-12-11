@@ -1,15 +1,14 @@
 package IPC::PubSub::Cache::JiftyDBI::Stash::Publisher;
-
-use warnings;
 use strict;
+use warnings;
 
 use vars qw/$TABLE_PREFIX/;
 
 use Jifty::DBI::Schema;
 use Jifty::DBI::Record schema {
-    column channel    => type is 'text';
-    column name    => type is 'text';
-    column idx => type is 'int';
+    column channel  => type is 'text';
+    column name     => type is 'text';
+    column idx      => type is 'int';
 };
 
 

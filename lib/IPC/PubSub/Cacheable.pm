@@ -1,5 +1,6 @@
 package IPC::PubSub::Cacheable;
 use strict;
+use warnings;
 use Scalar::Util qw( refaddr );
 
 my %Cache;

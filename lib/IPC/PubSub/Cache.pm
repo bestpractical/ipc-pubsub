@@ -1,6 +1,6 @@
 package IPC::PubSub::Cache;
-
 use strict;
+use warnings;
 use File::Spec;
 use Time::HiRes ();
 

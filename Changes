@@ -1,5 +1,4 @@
-
-[Changes for 0.22 - ]
+[Changes for 0.22 - 2006-12-11]
 
 * INCOMPATIBLE CHANGE to Jifty::DBI backend: "key" column changed to "data_key"
   because "key" is a reserved word in some SQL databases.

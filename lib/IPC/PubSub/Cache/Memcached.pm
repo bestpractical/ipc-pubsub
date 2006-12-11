@@ -1,5 +1,6 @@
 package IPC::PubSub::Cache::Memcached;
 use strict;
+use warnings;
 use base 'IPC::PubSub::Cache';
 use Cache::Memcached;
 use Time::HiRes ();

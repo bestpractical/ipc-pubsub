@@ -1,7 +1,6 @@
 package IPC::PubSub::Cache::JiftyDBI::Stash::Item;
-
-use warnings;
 use strict;
+use warnings;
 
 use vars qw/$TABLE_PREFIX/;
 

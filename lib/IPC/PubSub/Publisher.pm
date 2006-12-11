@@ -1,6 +1,6 @@
 package IPC::PubSub::Publisher;
 use strict;
-use Data::UUID;
+use warnings;
 use base qw/Class::Accessor::Fast/;
 
 __PACKAGE__->mk_accessors(qw/expiry _indice _uuid _cache/);
@@ -8,6 +8,9 @@ __PACKAGE__->mk_accessors(qw/expiry _indice _uuid _cache/);
 sub new {
     my $class   = shift;
     my $cache   = shift;
+
+    require Data::UUID;
+
     my $uuid    = Data::UUID->new->create_b64;
     my $self    = bless({
         expiry  => 0,

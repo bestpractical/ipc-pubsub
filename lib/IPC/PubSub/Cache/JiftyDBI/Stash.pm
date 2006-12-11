@@ -1,14 +1,13 @@
 package IPC::PubSub::Cache::JiftyDBI::Stash;
-use warnings;
 use strict;
-
+use warnings;
 
 use Jifty::DBI::Handle;
 use Jifty::DBI::SchemaGenerator;
-         use File::Temp qw/ tempfile tempdir /;
 use IPC::PubSub::Cache::JiftyDBI::Stash::Item;
 use IPC::PubSub::Cache::JiftyDBI::Stash::Publisher;
-my $FILE=       $ENV{'HOME'}.  '/.messagebus.sqlite';
+
+use File::Temp qw/ tempfile tempdir /;
 
 sub new {
     my $class = shift;

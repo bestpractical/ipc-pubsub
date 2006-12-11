@@ -1,5 +1,6 @@
 package IPC::PubSub::Cache::DBM_Deep;
 use strict;
+use warnings;
 use base 'IPC::PubSub::Cache';
 use DBM::Deep;
 use File::Temp qw/ tempfile /;
