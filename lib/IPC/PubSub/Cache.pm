@@ -82,6 +82,9 @@ sub lock {
     }
 }
 
+sub disconnect {
+}
+
 END {
     rmdir(LOCK . unpack("H*", $_)) for keys %locks;
 }

@@ -13,6 +13,11 @@ sub new {
     bless(\$mem, $class);
 }
 
+sub disconnect {
+    my $eslf = shift;
+    $$self->disconnect_all;
+}
+
 sub default_config {
     my ($class, $namespace) = @_;
     return {

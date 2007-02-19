@@ -1,5 +1,5 @@
 package IPC::PubSub;
-$IPC::PubSub::VERSION = '0.22';
+$IPC::PubSub::VERSION = '0.23';
 
 use 5.006;
 use strict;
@@ -34,11 +34,12 @@ sub new_subscriber {
     IPC::PubSub::Subscriber->new($self->_cache, @_ ? @_ : '');
 }
 
-sub fetch   { (+shift)->_cache->fetch(@_)   }
-sub store   { (+shift)->_cache->store(@_)   }
-sub lock    { (+shift)->_cache->lock(@_)    }
-sub unlock  { (+shift)->_cache->unlock(@_)  }
-sub modify  { (+shift)->_cache->modify(@_)  }
+sub fetch      { ( +shift )->_cache->fetch(@_) }
+sub store      { ( +shift )->_cache->store(@_) }
+sub lock       { ( +shift )->_cache->lock(@_) }
+sub unlock     { ( +shift )->_cache->unlock(@_) }
+sub modify     { ( +shift )->_cache->modify(@_) }
+sub disconnect { ( +shift )->_cache->disconnect }
 
 1;
 
@@ -115,6 +116,9 @@ IPC::PubSub - Interprocess Publish/Subscribe channels
     # Shorthand for $bus->modify('key' => sub { $_ });
     $bus->modify('key');
 
+    # Disconnect the backend connection explicitly
+    $bus->disconnect;
+
 =head1 DESCRIPTION
 
 This module provides a simple API for publishing messages to I<channels>
@@ -141,7 +145,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2006 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2006, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

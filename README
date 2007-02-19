@@ -67,6 +67,9 @@ SYNOPSIS
         # Shorthand for $bus->modify('key' => sub { $_ });
         $bus->modify('key');
 
+        # Disconnect the backend connection explicitly
+        $bus->disconnect;
+
 DESCRIPTION
     This module provides a simple API for publishing messages to *channels*
     and for subscribing to them.
@@ -90,7 +93,7 @@ AUTHORS
     Audrey Tang <cpan@audreyt.org>
 
 COPYRIGHT
-    Copyright 2006 by Audrey Tang <cpan@audreyt.org>.
+    Copyright 2006, 2007 by Audrey Tang <cpan@audreyt.org>.
 
     This software is released under the MIT license cited below.
 

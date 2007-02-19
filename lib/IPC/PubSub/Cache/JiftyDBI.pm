@@ -15,7 +15,9 @@ sub new {
    return $self; 
 }
 
-
+sub disconnect {
+    $STASH->handle->disconnect;
+}
 
 sub fetch {
     my $self  = shift;
