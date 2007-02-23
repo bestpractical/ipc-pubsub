@@ -14,7 +14,7 @@ sub new {
 }
 
 sub disconnect {
-    my $eslf = shift;
+    my $self = shift;
     $$self->disconnect_all;
 }
 
