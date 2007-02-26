@@ -1,3 +1,7 @@
+[Changes for 0.24 - 2007-02-26]
+
+* Typo fix in Memcached driver.
+
 [Changes for 0.23 - 2007-02-19]
 
 * New ->disconnect API to explicitly disconnect from the backend store.
