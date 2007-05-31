@@ -1,3 +1,7 @@
+[Changes for 0.26 - 2007-05-31]
+
+* Repair a broken attempt at PAUSE uploading.
+
 [Changes for 0.25 - 2007-05-31]
 
 * The DBM::Deep tests of t/basic.t now explicitly passes the temporary
