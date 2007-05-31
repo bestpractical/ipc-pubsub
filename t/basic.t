@@ -3,6 +3,8 @@ use warnings;
 use Test::More;
 use IPC::PubSub;
 use IO::Socket::INET;
+use File::Temp ':POSIX';
+
 
 my @backends = qw(PlainHash);
 
@@ -12,7 +14,11 @@ unshift @backends, 'Memcached' if eval { require Cache::Memcached } and IO::Sock
 
 plan tests => 12 * scalar @backends;
 
+my $tmp = tmpnam();
+END { unlink $tmp }
+
 my %init_args = (
+    DBM_Deep    => [ $tmp ],
     JiftyDBI    => [ db_init => 1 ],
     Memcached   => [ rand() . $$ ],
 );

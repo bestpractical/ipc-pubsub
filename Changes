@@ -1,3 +1,9 @@
+[Changes for 0.25 - 2007-05-31]
+
+* The DBM::Deep tests of t/basic.t now explicitly passes the temporary
+  database file to the backend; now it won't hangs on OSX anymore.
+  Contributed by: Arne Skjærholt
+
 [Changes for 0.24 - 2007-02-26]
 
 * Typo fix in Memcached driver.
