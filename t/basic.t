@@ -12,7 +12,7 @@ unshift @backends, 'DBM_Deep' if eval { require DBM::Deep };
 unshift @backends, 'JiftyDBI' if eval { require Jifty::DBI };
 unshift @backends, 'Memcached' if eval { require Cache::Memcached } and IO::Socket::INET->new('127.0.0.1:11211');
 
-plan tests => 12 * scalar @backends;
+plan tests => 15 * scalar @backends;
 
 my $tmp = tmpnam();
 END { unlink $tmp }
@@ -42,11 +42,15 @@ SKIP: for my $backend (@backends) {
     $pub->msg(['bar', 'bar']);
     $pub->msg('baz');
 
-    is_deeply([$sub[0]->get], ['foo', ['bar', 'bar'], 'baz'], 'get worked');
+    my $got = $sub[0]->get;
+    is($got->[0], 'foo', 'get worked');
+    is($got->[1][0], 'bar', 'get worked');
+    is($got->[1][1], 'bar', 'get worked');
+    is($got->[2], 'baz', 'get worked');
     is_deeply([$sub[0]->get], [], 'get emptied the cache');
 
-    is_deeply([map {$_->[1]} @{$sub[1]->get_all->{''}}], [['bar', 'bar'], 'baz'], 'get_all worked');
-    is_deeply([map {$_->[1]} @{$sub[1]->get_all->{''}}], [], 'get_all emptied the cache');
+    is_deeply([map {ref($_) ? [@$_] : $_} map {$_->[1]} @{$sub[1]->get_all->{''}}], [['bar', 'bar'], 'baz'], 'get_all worked');
+    is_deeply([map {ref($_) ? [@$_] : $_} map {$_->[1]} @{$sub[1]->get_all->{''}}], [], 'get_all emptied the cache');
 
     is($bus->modify('key'), undef, 'modify (1)');
     is($bus->modify('key' => 'val'), 'val', 'modify (2)');

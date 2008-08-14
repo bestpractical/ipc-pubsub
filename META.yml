@@ -1,8 +1,9 @@
 --- 
 abstract: Interprocess Publish/Subscribe channels
-author: Audrey Tang <cpan@audreyt.org>
+author: 
+  - Audrey Tang <cpan@audreyt.org>
 distribution_type: module
-generated_by: Module::Install version 0.64
+generated_by: Module::Install version 0.68
 license: MIT
 meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
@@ -14,8 +15,9 @@ no_index:
     - t
 requires: 
   Class::Accessor::Fast: 0
-  DBM::Deep: 0
+  DBM::Deep: 1.00
   Data::UUID: 0
+  Storable: 0
   Time::HiRes: 0
   perl: 5.6.0
-version: 0.26
+version: 0.28

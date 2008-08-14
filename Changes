@@ -1,3 +1,15 @@
+[Changes for 0.28 - 2008-08-15]
+
+* We now require DBM::Deep 1.00 or later.
+
+* Improved data consistency in DBM::Deep backend so it won't sometimes
+  die with a "not an ARRAY reference" message.
+  Reported by: Matthew Pitts
+
+[Changes for 0.27 - 2007-10-09]
+
+* Adjust tests so it no longer fails with newer versions of DBM::Deep.
+
 [Changes for 0.26 - 2007-05-31]
 
 * Repair a broken attempt at PAUSE uploading.

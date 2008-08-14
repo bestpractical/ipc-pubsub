@@ -24,3 +24,4 @@ MANIFEST			This list of files
 META.yml
 README
 t/basic.t
+SIGNATURE                                Public-key signature (added by MakeMaker)

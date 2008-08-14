@@ -2,13 +2,18 @@ package IPC::PubSub::Cache::DBM_Deep;
 use strict;
 use warnings;
 use base 'IPC::PubSub::Cache';
+use Storable qw/ nfreeze thaw /;
 use DBM::Deep;
 use File::Temp qw/ tempfile /;
 
 sub new {
     my $class = shift;
     my $file  = shift;
-    my $mem = DBM::Deep->new($file || $class->default_config);
+    my $mem = DBM::Deep->new(
+        file        => ((defined $file and length $file) ? $file : $class->default_config),
+        locking     => 1,
+        autoflush   => 1,
+    );
     bless(\$mem, $class);
 }
 
@@ -19,12 +24,12 @@ sub default_config {
 
 sub fetch {
     my $self = shift;
-    map { $$self->get($_) } @_;
+    return map { thaw($$self->get($_)) } @_;
 }
 
 sub store {
     my ($self, $key, $val, $time, $expiry) = @_;
-    $$self->put($key, [$time, $val]);
+    $$self->put($key => nfreeze([$time, $val]));
 }
 
 sub publisher_indices {
