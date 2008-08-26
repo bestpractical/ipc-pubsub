@@ -58,6 +58,7 @@ sub msg {
 no warnings 'redefine';
 sub DESTROY {
     my $self = shift;
+    return unless $self->_cache;
     $self->_cache->remove_publisher($_, $self->_cache) for $self->channels;
 }
 
