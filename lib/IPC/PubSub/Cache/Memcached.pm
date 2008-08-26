@@ -10,6 +10,8 @@ sub new {
     my $namespace   = shift || $class;
     my $config      = shift || $class->default_config($namespace);
     my $mem = Cache::Memcached->new($config);
+    # Force our connection to never timeout on selects
+    $mem->{select_timeout} = undef;
     bless(\$mem, $class);
 }
 
@@ -63,14 +65,18 @@ sub publisher_indices {
 sub lock {
     my ($self, $key) = @_;
     for my $i (1..100) {
-        return if $$self->add("lock:$key" => 1);
+        return 1 if $$self->add("lock:$key" => $$);
         Time::HiRes::usleep(rand(250000)+250000);
     }
+    return 0;
 }
 
 sub unlock {
     my ($self, $chan) = @_;
-    $$self->delete("lock:$chan");
+    my $timeout = $$self->{'select_timeout'};
+    $$self->{'select_timeout'} = undef;
+    return 1 if $$self->delete("lock:$chan");
+    return 0;
 }
 
 sub add_publisher {
