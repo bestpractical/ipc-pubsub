@@ -73,8 +73,6 @@ sub lock {
 
 sub unlock {
     my ($self, $chan) = @_;
-    my $timeout = $$self->{'select_timeout'};
-    $$self->{'select_timeout'} = undef;
     return 1 if $$self->delete("lock:$chan");
     return 0;
 }
