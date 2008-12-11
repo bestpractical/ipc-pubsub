@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use base qw/Class::Accessor::Fast/;
 
-__PACKAGE__->mk_accessors(qw/expiry _indice _uuid _cache/);
+__PACKAGE__->mk_accessors(qw/expiry/);
+__PACKAGE__->mk_ro_accessors(qw/_indice uuid _cache/);
 
 sub new {
     my $class   = shift;
@@ -16,7 +17,7 @@ sub new {
         expiry  => 0,
         _cache  => $cache,
         _indice => { map { $_ => 1 } @_ },
-        _uuid   => $uuid,
+        uuid    => $uuid,
     });
     $cache->add_publisher($_, $uuid) for @_;
     return $self;
@@ -32,19 +33,19 @@ sub channels {
 sub publish {
     my $self = shift;
     $self->_indice->{$_} ||= do {
-        $self->_cache->add_publisher($_);
+        $self->_cache->add_publisher($_, $self->uuid);
         1;
     } for @_;
 }
 
 sub unpublish {
     my $self = shift;
-    delete($self->_indice->{$_}) and $self->_cache->remove_publisher($_) for @_;
+    delete($self->_indice->{$_}) and $self->_cache->remove_publisher($_, $self->uuid) for @_;
 }
 
 sub msg {
     my $self    = shift;
-    my $uuid    = $self->_uuid;
+    my $uuid    = $self->uuid;
     my $indice  = $self->_indice;
     my $expiry  = $self->expiry;
     foreach my $msg (@_) {
@@ -59,7 +60,7 @@ no warnings 'redefine';
 sub DESTROY {
     my $self = shift;
     return unless $self->_cache;
-    $self->_cache->remove_publisher($_, $self->_cache) for $self->channels;
+    $self->_cache->remove_publisher($_, $self->uuid) for $self->channels;
 }
 
 1;
