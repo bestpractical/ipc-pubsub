@@ -22,7 +22,7 @@ my %init_args = (
     Memcached   => [ rand() . $$ ],
 );
 
-SKIP: for my $backend (@backends) {
+for my $backend (@backends) {
     diag("Testing backend $backend");
 
     my $bus = IPC::PubSub->new( $backend, @{ $init_args{$backend} } );
