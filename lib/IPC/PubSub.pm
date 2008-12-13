@@ -1,5 +1,5 @@
 package IPC::PubSub;
-$IPC::PubSub::VERSION = '0.28';
+$IPC::PubSub::VERSION = '0.29';
 
 use 5.006;
 use strict;
@@ -127,9 +127,9 @@ and for subscribing to them.
 When a I<message> is published on a channel, all subscribers currently in
 that channel will get it on their next C<get> or C<get_all> call.
 
-Currently, it offers three backends: C<DBM_Deep> for on-disk storage,
-C<Memcached> for possibly multi-host storage, and C<PlainHash> for
-single-process storage.
+Currently, it offers four backends: C<DBM_Deep> for on-disk storage,
+C<Memcached> for possibly multi-host storage, C<Jifty::DBI> for
+database-backed storage, and C<PlainHash> for single-process storage.
 
 Please see the tests in F<t/> for this distribution, as well as L</SYNOPSIS>
 above, for some usage examples; detailed documentation is not yet available.

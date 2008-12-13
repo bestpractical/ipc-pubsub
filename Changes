@@ -1,3 +1,15 @@
+[Changes for 0.29 - 2008-12-13]
+
+* Publisher and index fixes
+
+* We don't need to force select_timeout anymore, and it causes
+  explosions if called during global destruction, when $$self->[0]
+  (_part_ of the pseudohash) may have gone missing already, but the
+  object itself is still there.  So $$self->{anything} explodes with
+  "not a hash reference" _sometimes_, despite $$self always being an
+  arrayref.
+  ..friends don't let friends use pseudohashes.
+
 [Changes for 0.28 - 2008-08-15]
 
 * We now require DBM::Deep 1.00 or later.
